@@ -4,10 +4,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends netcat
 
 RUN groupadd -r pithos --gid=1000 && useradd -r -g pithos --home /pithos --uid=1000 pithos
 
-RUN mkdir /etc/pithos /pithos && chown pithos:pithos /etc/pithos /pithos
+RUN mkdir /etc/pithos /pithos /pithos/data && chown pithos:pithos -R /etc/pithos /pithos
 
 USER pithos
 
-WORKDIR /pithos
 
-CMD ["bash", "docker/docker-entrypoint.sh"]
+ADD doc/ /pithos/doc/
+ADD project.clj /pithos/
+COPY target/*-standalone.jar /pithos/
+
+ADD docker/docker-entrypoint.sh /docker-entrypoint.sh
+
+WORKDIR /pithos
+CMD ["bash", "/docker-entrypoint.sh"]

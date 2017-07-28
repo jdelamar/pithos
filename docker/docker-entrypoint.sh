@@ -2,14 +2,14 @@
 
 set -eux
 
-cp doc/pithos.yaml /etc/pithos/
+cp /pithos/doc/pithos.yaml /etc/pithos/
 sed -i \
   -e "s/localhost/cassandra/g" \
   -e "s/level: info/level: debug/" \
   /etc/pithos/pithos.yaml
 
 readonly version=$(awk '/\(defproject/{gsub("\"", "", $3);print $3}' project.clj)
-readonly target="target/pithos-${version}-standalone.jar"
+readonly target="/pithos/pithos-${version}-standalone.jar"
 
 if [[ ! -f "${target}" ]]; then
   lein uberjar

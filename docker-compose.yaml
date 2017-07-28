@@ -1,14 +1,12 @@
-version: '2'
+version: '3'
 services:
   pithos:
-    build: .
+    image: gcr.io/npav-172917/pithos:latest
     ports:
       - "8080:8080"
     depends_on:
       - cassandra
-    links:
-      - cassandra
     volumes:
-      - ./:/pithos
+      - /var/lib/data/pithos:/pithos/data
   cassandra:
     image: cassandra:2.1
