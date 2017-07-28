@@ -7,7 +7,7 @@ logging:
   overrides:
     io.pithos: debug
 options:
-  service-uri: s3.example.com
+  service-uri: pithos-hostname
   default-region: myregion
 keystore:
   keys:
