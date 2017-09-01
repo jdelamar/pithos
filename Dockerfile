@@ -1,6 +1,6 @@
 FROM clojure:lein-2.6.1
 
-RUN apt-get update && apt-get install -y --no-install-recommends netcat
+RUN apt-get update && apt-get install -y --no-install-recommends netcat s3cmd
 
 RUN groupadd -r pithos --gid=1000 && useradd -r -g pithos --home /pithos --uid=1000 pithos
 
@@ -14,6 +14,8 @@ ADD project.clj /pithos/
 COPY target/*-standalone.jar /pithos/
 
 ADD docker/docker-entrypoint.sh /docker-entrypoint.sh
+
+EXPOSE 9080
 
 WORKDIR /pithos
 CMD ["bash", "/docker-entrypoint.sh"]

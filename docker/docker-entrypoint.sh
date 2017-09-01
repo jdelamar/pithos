@@ -2,10 +2,13 @@
 
 set -eux
 
+: ${CASSANDRA_SEED='cassandra'}
+: ${LOG_LEVEL=info}
+
 cp /pithos/doc/pithos.yaml /etc/pithos/
 sed -i \
-  -e "s/localhost/cassandra/g" \
-  -e "s/level: info/level: debug/" \
+  -e "s/localhost/${CASSANDRA_SEED}/g" \
+  -e "s/level: info/level: ${LOG_LEVEL}/" \
   -e "s/pithos-hostname/${HOSTNAME}/" \
   /etc/pithos/pithos.yaml
 
@@ -19,7 +22,7 @@ if [[ ! -f "${target}" ]]; then
 fi
 
 # wait for cassandra being ready
-until netcat -z -w 2 cassandra 9042; do sleep 1; done
+until netcat -z -w 2 ${CASSANDRA_SEED} 9042; do sleep 1; done
 
-java -jar "${target}" -a install-schema
+java -jar "${target}" -a install-schema || true
 exec java -jar "${target}" -a api-run
